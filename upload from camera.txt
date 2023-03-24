@@ -1,0 +1,19 @@
+ File? file;
+  var image_pickker = ImagePicker();
+  uploadImages() async {
+    var picker = await image_pickker.pickImage(source: ImageSource.gallery);
+    if (picker != null) {
+      var imgname = basename(picker.path);
+      var random = Random().nextInt(10000000);
+      imgname = "$imgname($random)";
+      file = File(picker.path);
+      //upload file start :
+
+      final storageRef = FirebaseStorage.instance.ref("$imgname");
+      await storageRef.putFile(file!);
+      var url = await storageRef.getDownloadURL();
+      print(url);
+    } else {
+      print("Please choose Image~");
+    }
+  }
